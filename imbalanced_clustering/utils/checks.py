@@ -3,11 +3,21 @@ import os
 import threading
 import numbers
 from collections.abc import Sequence
+from contextlib import suppress
 
 import numpy as np
 import scipy.sparse as sp
 from numpy.core.numeric import ComplexWarning  
-from contextlib import suppress
+
+def _astype_copy_false(X):
+    """Returns the copy=False parameter for
+    {ndarray, csr_matrix, csc_matrix}.astype when possible,
+    otherwise don't specify
+    """
+    if sp_version >= parse_version("1.1") or not sp.issparse(X):
+        return {"copy": False}
+    else:
+        return {}
 
 def _is_integral_float(y):
     return y.dtype.kind == "f" and np.all(y.astype(int) == y)
