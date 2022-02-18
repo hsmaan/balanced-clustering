@@ -1,0 +1,1 @@
+from .contingency import pair_confusion_matrix
