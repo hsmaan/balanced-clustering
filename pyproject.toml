@@ -11,6 +11,7 @@ scipy = "^1.8.0"
 scikit-learn = "^1.0.2"
 pandas = "^1.4.1"
 Cython = "^0.29.28"
+unittest = "^0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
