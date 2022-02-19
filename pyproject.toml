@@ -5,7 +5,7 @@ description = "Clustering metrics for imbalanced datasets"
 authors = ["Hassaan Maan <hurmaan99@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.10.0"
+python = ">=3.8,<=3.10.0"
 numpy = "^1.22.2"
 scipy = "^1.8.0"
 scikit-learn = "^1.0.2"
