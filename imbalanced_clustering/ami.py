@@ -43,7 +43,7 @@ def balanced_adjusted_mutual_info(
         if `True`, reweighs the contingency table based on the true labels
         such that they all have equal membership. The total number of samples
         is preserved with a round-off error. If 'False', this reverts the 
-        balanced ARI to the original ARI implementation.
+        balanced AMI to the original AMI implementation.
     Returns
     -------
     AMI: float (upperlimited by 1.0)
@@ -72,7 +72,7 @@ def balanced_adjusted_mutual_info(
     ):
         return 1.0
     contingency = contingency_matrix(
-        labels_true, labels_pred, reweigh = reweigh, sparse=True
+        labels_true, labels_pred, reweigh=reweigh, sparse=True
     )
     contingency = contingency.astype(np.float64)
     # Calculate the MI for the two clusterings
