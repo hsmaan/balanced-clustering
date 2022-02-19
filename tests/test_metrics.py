@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd 
 from sklearn import cluster
 
-from imbalanced_clustering import balanced_adjusted_rand_index
+from imbalanced_clustering import balanced_adjusted_rand_index, \
+    balanced_adjusted_mutual_info
 
 # Set random seed for reproducibility
 random.seed(42)
@@ -113,7 +114,7 @@ def test_bal_ari_2_class_balanced(two_classes_balanced):
     )
 
     # Ensure that the balanced ARI is close to the imbalanced ARI with roundoff error
-    assert bal_ari == (imbal_ari)
+    assert bal_ari == pytest.approx(imbal_ari)
     
 def test_bal_ari_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
     # Perform k-means clustering on three classes with mixed sizes and imbalanced/overlapping
@@ -129,3 +130,48 @@ def test_bal_ari_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
 
     # Ensure that the balanced ARI in this case is higher than the imbalanced ARI
     assert bal_ari > imbal_ari
+    
+def test_bal_ami_3_class_1_small(three_classes_one_small):
+    # Perform k-means clustering on three classes with one minority class
+    class_cluster_df = k_means_df(three_classes_one_small, n_clusters = 2)
+
+    # Calculated balanced and imbalanced AMI 
+    bal_ami = balanced_adjusted_mutual_info(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = True
+    )
+    imbal_ami = balanced_adjusted_mutual_info(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = False
+    )
+
+    # Ensure that the balanced AMI is lower than the imbalanced AMI
+    assert bal_ami < imbal_ami
+    
+def test_bal_ami_2_class_balanced(two_classes_balanced):
+    # Perform k-means clustering on two classes with the same size
+    class_cluster_df = k_means_df(two_classes_balanced, n_clusters = 2)
+
+    # Calculated balanced and imbalanced AMI 
+    bal_ami = balanced_adjusted_mutual_info(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = True
+    )
+    imbal_ami = balanced_adjusted_mutual_info(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = False
+    )
+
+    # Ensure that the balanced AMI is close to the imbalanced AMI with roundoff error
+    assert bal_ami == pytest.approx(imbal_ami)
+    
+def test_bal_ami_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
+    # Perform k-means clustering on three classes with mixed sizes and imbalanced/overlapping
+    class_cluster_df = k_means_df(three_classes_mixed_imbalanced, n_clusters = 3)
+
+    # Calculated balanced and imbalanced AMI 
+    bal_ami = balanced_adjusted_mutual_info(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = True
+    )
+    imbal_ami = balanced_adjusted_mutual_info(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = False
+    )
+
+    # Ensure that the balanced AMI in this case is higher than the imbalanced AMI
+    assert bal_ami > imbal_ami

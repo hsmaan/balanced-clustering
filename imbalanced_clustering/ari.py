@@ -35,7 +35,6 @@ def balanced_adjusted_rand_index(labels_true, labels_pred, reweigh=True):
     ARI : float
        Similarity score between -1.0 and 1.0. Random labelings have an ARI
        close to 0.0. 1.0 stands for perfect match.
-    -------
     References
     ----------
     .. [Hubert1985] L. Hubert and P. Arabie, Comparing Partitions,
