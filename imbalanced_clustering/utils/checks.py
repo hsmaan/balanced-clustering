@@ -1,5 +1,5 @@
 import warnings
-import os 
+import os
 import threading
 import numbers
 from collections.abc import Sequence
@@ -7,7 +7,8 @@ from contextlib import suppress
 
 import numpy as np
 import scipy.sparse as sp
-from numpy.core.numeric import ComplexWarning  
+from numpy.core.numeric import ComplexWarning
+
 
 def _astype_copy_false(X):
     """Returns the copy=False parameter for
@@ -19,8 +20,10 @@ def _astype_copy_false(X):
     else:
         return {}
 
+
 def _is_integral_float(y):
     return y.dtype.kind == "f" and np.all(y.astype(int) == y)
+
 
 def check_consistent_length(*arrays):
     """Check that all arrays have consistent first dimensions.
@@ -38,6 +41,7 @@ def check_consistent_length(*arrays):
             "Found input variables with inconsistent numbers of samples: %r"
             % [int(l) for l in lengths]
         )
+
 
 def is_multilabel(y):
     """Check if ``y`` is in a multilabel format.
@@ -96,6 +100,7 @@ def is_multilabel(y):
         return len(labels) < 3 and (
             y.dtype.kind in "biu" or _is_integral_float(labels)  # bool, int, uint
         )
+
 
 def type_of_target(y):
     """Determine the type of data indicated by the target.
@@ -223,8 +228,10 @@ def type_of_target(y):
     else:
         return "binary"  # [1, 2] or [["a"], ["b"]]
 
+
 def _object_dtype_isnan(X):
     return X != X
+
 
 _global_config = {
     "assume_finite": bool(os.environ.get("SKLEARN_ASSUME_FINITE", False)),
@@ -234,12 +241,14 @@ _global_config = {
 }
 _threadlocal = threading.local()
 
+
 def _get_threadlocal_config():
     """Get a threadlocal **mutable** configuration. If the configuration
     does not exist, copy the default global configuration."""
     if not hasattr(_threadlocal, "global_config"):
         _threadlocal.global_config = _global_config.copy()
     return _threadlocal.global_config
+
 
 def _get_config():
     """Retrieve current values for configuration set by :func:`set_config`.
@@ -255,6 +264,7 @@ def _get_config():
     # Return a copy of the threadlocal configuration so that users will
     # not be able to modify the configuration with the returned dict.
     return _get_threadlocal_config().copy()
+
 
 def _safe_accumulator_op(op, x, *args, **kwargs):
     """
@@ -281,7 +291,7 @@ def _safe_accumulator_op(op, x, *args, **kwargs):
         result = op(x, *args, **kwargs, dtype=np.float64)
     else:
         result = op(x, *args, **kwargs)
-    return 
+    return
 
 
 def _assert_all_finite(X, allow_nan=False, msg_dtype=None):
@@ -315,6 +325,7 @@ def _assert_all_finite(X, allow_nan=False, msg_dtype=None):
         if _object_dtype_isnan(X).any():
             raise ValueError("Input contains NaN")
 
+
 def _check_large_sparse(X, accept_large_sparse=False):
     """Raise a ValueError if X has 64bit indices and accept_large_sparse=False"""
     if not accept_large_sparse:
@@ -332,6 +343,7 @@ def _check_large_sparse(X, accept_large_sparse=False):
                     "Only sparse matrices with 32-bit integer"
                     " indices are accepted. Got %s indices." % indices_datatype
                 )
+
 
 def _ensure_sparse_format(
     spmatrix, accept_sparse, dtype, copy, force_all_finite, accept_large_sparse
@@ -424,6 +436,7 @@ def _ensure_sparse_format(
 
     return spmatrix
 
+
 def _ensure_no_complex_data(array):
     if (
         hasattr(array, "dtype")
@@ -432,7 +445,8 @@ def _ensure_no_complex_data(array):
         and array.dtype.kind == "c"
     ):
         raise ValueError("Complex data not supported\n{}\n".format(array))
-    
+
+
 def _num_samples(x):
     """Return number of samples in array-like x."""
     message = "Expected sequence or array-like, got %s" % type(x)
@@ -460,6 +474,7 @@ def _num_samples(x):
         return len(x)
     except TypeError as type_error:
         raise TypeError(message) from type_error
+
 
 def check_array(
     array,

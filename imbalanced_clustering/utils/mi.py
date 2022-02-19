@@ -27,6 +27,7 @@ def entropy(labels):
     # possible loss of precision
     return -np.sum((pi / pi_sum) * (np.log(pi) - log(pi_sum)))
 
+
 def mutual_info_score(labels_true, labels_pred, *, contingency=None):
     """Mutual Information between two clusterings.
     The Mutual Information is a measure of the similarity between two labels

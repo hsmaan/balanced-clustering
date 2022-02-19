@@ -2,6 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 from sklearn.utils import sparsefuncs
 
+
 def contingency_matrix(
     labels_true, labels_pred, *, reweigh=False, eps=None, sparse=False, dtype=np.int64
 ):
@@ -66,11 +67,12 @@ def contingency_matrix(
         contingency = contingency.astype(np.float64)
         counts_sum_per_class = np.ravel(contingency.sum(1))
         target = round(np.mean(counts_sum_per_class))
-        counts_norm = counts_sum_per_class/target
+        counts_norm = counts_sum_per_class / target
         sparsefuncs.inplace_row_scale(contingency, 1 / counts_norm)
         contingency = contingency.astype(np.int64)
-        
+
     return contingency
+
 
 def pair_confusion_matrix(labels_true, labels_pred, reweigh=False):
     """Pair confusion matrix arising from two clusterings.
@@ -110,15 +112,14 @@ def pair_confusion_matrix(labels_true, labels_pred, reweigh=False):
 
     # Computation using the contingency data
     contingency = contingency_matrix(
-        labels_true, labels_pred, reweigh=reweigh, sparse=True, 
-        dtype=np.int64
+        labels_true, labels_pred, reweigh=reweigh, sparse=True, dtype=np.int64
     )
     n_c = np.ravel(contingency.sum(axis=1))
     n_k = np.ravel(contingency.sum(axis=0))
-    sum_squares = (contingency.data ** 2).sum()
+    sum_squares = (contingency.data**2).sum()
     C = np.empty((2, 2), dtype=np.int64)
     C[1, 1] = sum_squares - n_samples
     C[0, 1] = contingency.dot(n_k).sum() - sum_squares
     C[1, 0] = contingency.transpose().dot(n_c).sum() - sum_squares
-    C[0, 0] = n_samples ** 2 - C[0, 1] - C[1, 0] - sum_squares
+    C[0, 0] = n_samples**2 - C[0, 1] - C[1, 0] - sum_squares
     return C

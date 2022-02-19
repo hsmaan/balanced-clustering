@@ -1,8 +1,15 @@
-import numpy as np 
+import numpy as np
 
-from .utils import check_clusterings, contingency_matrix, entropy, mutual_info_score, \
-    expected_mutual_information, generalized_average
-    
+from .utils import (
+    check_clusterings,
+    contingency_matrix,
+    entropy,
+    mutual_info_score,
+    expected_mutual_information,
+    generalized_average,
+)
+
+
 def balanced_adjusted_mutual_info(
     labels_true, labels_pred, *, average_method="arithmetic", reweigh=True
 ):
@@ -16,9 +23,9 @@ def balanced_adjusted_mutual_info(
     This metric is independent of the absolute values of the labels:
     a permutation of the class or cluster label values won't change the
     score value in any way.
-    The original AMI metric is a symmetric measure: switching :math:`U` 
+    The original AMI metric is a symmetric measure: switching :math:`U`
     (``label_true``) with :math:`V` (``labels_pred``) will return the same score value,
-    but this is not the case for the reweighted and balanced AMI. 
+    but this is not the case for the reweighted and balanced AMI.
     The balanced AMI is obtained by reweighing the contingency table
     for all true label marginals, such that they sum to the same nummber,
     while preserving the total number of samples.
@@ -42,7 +49,7 @@ def balanced_adjusted_mutual_info(
     reweigh : bool, default=True
         if `True`, reweighs the contingency table based on the true labels
         such that they all have equal membership. The total number of samples
-        is preserved with a round-off error. If 'False', this reverts the 
+        is preserved with a round-off error. If 'False', this reverts the
         balanced AMI to the original AMI implementation.
     Returns
     -------

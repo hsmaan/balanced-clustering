@@ -1,0 +1,31 @@
+name: Poetry build
+on: 
+  push:
+  pull_request:
+jobs:
+  poetry-build:
+    name: Build poetry dependencies
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.7, 3.8]
+        poetry-version: [1.0.10, 1.1.2]
+        os: [ubuntu-18.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2      
+      - name: Set-up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Poetry update
+        run: poetry update
+      - name: Poetry install
+        run: poetry install
+      - name: Test with pytest
+        run: poetry run pytest

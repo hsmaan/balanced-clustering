@@ -1,5 +1,6 @@
 from .utils import pair_confusion_matrix
 
+
 def balanced_adjusted_rand_index(labels_true, labels_pred, reweigh=True):
     """Rand index adjusted for chance and balanced across true labels.
     The Rand Index computes a similarity measure between two clusterings
@@ -15,7 +16,7 @@ def balanced_adjusted_rand_index(labels_true, labels_pred, reweigh=True):
     a permutation).
     The original ARI is a symmetric measure:
         adjusted_rand_score(a, b) == adjusted_rand_score(b, a)
-    But this does not hold due for the balanced ARI metric. 
+    But this does not hold due for the balanced ARI metric.
     The balanced ARI is obtained by reweighing the contingency table
     for all true label marginals, such that they sum to the same nummber,
     while preserving the total number of samples.
@@ -28,7 +29,7 @@ def balanced_adjusted_rand_index(labels_true, labels_pred, reweigh=True):
     reweigh : bool, default=True
         if `True`, reweighs the contingency table based on the true labels
         such that they all have equal membership. The total number of samples
-        is preserved with a round-off error. If 'False', this reverts the 
+        is preserved with a round-off error. If 'False', this reverts the
         balanced ARI to the original ARI implementation.
     Returns
     -------

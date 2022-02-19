@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def generalized_average(U, V, average_method):
     """Return a particular mean of two numbers."""
     if average_method == "min":

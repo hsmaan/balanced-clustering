@@ -1,8 +1,9 @@
 from .utils import entropy, mutual_info_score, contingency_matrix, check_clusterings
 
+
 def balanced_homogeneity_completeness_v_measure(
-        labels_true, labels_pred, *, beta=1.0, reweigh=True
-    ):
+    labels_true, labels_pred, *, beta=1.0, reweigh=True
+):
     """Compute balanced the homogeneity, completeness, and V-Measure scores.
     Those metrics are based on normalized conditional entropy measures of
     the clustering labeling to evaluate given the knowledge of a Ground
@@ -18,12 +19,12 @@ def balanced_homogeneity_completeness_v_measure(
     score values in any way.
     The imbalanced V-Measure is symmetric: swapping ``labels_true`` and
     ``label_pred`` will give the same score, but this is not the case for the
-    balanced V-Measure, as the true labels are reweighted. The symmetric 
-    property does not hold in general for balanced or imbalanced homogeneity and 
-    completeness measures. V-Measure is identical to 
+    balanced V-Measure, as the true labels are reweighted. The symmetric
+    property does not hold in general for balanced or imbalanced homogeneity and
+    completeness measures. V-Measure is identical to
     :func:`normalized_mutual_info_score` with the arithmetic averaging method.
-    The balanced homogeneity, completeness, and v-measure values are obtained by 
-    reweighing the contingency table for all true label marginals, such that they 
+    The balanced homogeneity, completeness, and v-measure values are obtained by
+    reweighing the contingency table for all true label marginals, such that they
     sum to the same nummber, while preserving the total number of samples.
     Parameters
     ----------
@@ -39,7 +40,7 @@ def balanced_homogeneity_completeness_v_measure(
     reweigh : bool, default=True
         if `True`, reweighs the contingency table based on the true labels
         such that they all have equal membership. The total number of samples
-        is preserved with a round-off error. If 'False', this reverts the 
+        is preserved with a round-off error. If 'False', this reverts the
         balanced to the original implementation for all measures.
     Returns
     -------
@@ -78,6 +79,7 @@ def balanced_homogeneity_completeness_v_measure(
 
     return homogeneity, completeness, v_measure_score
 
+
 def balanced_homogeneity(labels_true, labels_pred, reweigh=True):
     """Class balanced homogeneity metric of a cluster labeling given a ground truth.
     A clustering result satisfies homogeneity if all of its clusters
@@ -87,9 +89,9 @@ def balanced_homogeneity(labels_true, labels_pred, reweigh=True):
     score value in any way.
     This metric is not symmetric: switching ``label_true`` with ``label_pred``
     will return the :func:`completeness_score` which will be different in
-    general. 
-    The balanced homogeneity is obtained by reweighing the contingency table for 
-    all true label marginals, such that they sum to the same nummber, while 
+    general.
+    The balanced homogeneity is obtained by reweighing the contingency table for
+    all true label marginals, such that they sum to the same nummber, while
     preserving the total number of samples.
     Parameters
     ----------
@@ -100,7 +102,7 @@ def balanced_homogeneity(labels_true, labels_pred, reweigh=True):
     reweigh : bool, default=True
         if `True`, reweighs the contingency table based on the true labels
         such that they all have equal membership. The total number of samples
-        is preserved with a round-off error. If 'False', this reverts the 
+        is preserved with a round-off error. If 'False', this reverts the
         balanced homogeneity to the original homogeneity implementation.
     Returns
     -------
@@ -127,8 +129,8 @@ def balanced_completeness(labels_true, labels_pred, reweigh=True):
     This metric is not symmetric: switching ``label_true`` with ``label_pred``
     will return the :func:`homogeneity_score` which will be different in
     general.
-    The balanced completeness is obtained by reweighing the contingency table for 
-    all true label marginals, such that they sum to the same nummber, while 
+    The balanced completeness is obtained by reweighing the contingency table for
+    all true label marginals, such that they sum to the same nummber, while
     preserving the total number of samples.
     Parameters
     ----------
@@ -139,7 +141,7 @@ def balanced_completeness(labels_true, labels_pred, reweigh=True):
     reweigh : bool, default=True
             if `True`, reweighs the contingency table based on the true labels
             such that they all have equal membership. The total number of samples
-            is preserved with a round-off error. If 'False', this reverts the 
+            is preserved with a round-off error. If 'False', this reverts the
             balanced completeness to the original completeness implementation.
     Returns
     -------
@@ -164,11 +166,11 @@ def balanced_v_measure(labels_true, labels_pred, *, beta=1.0, reweigh=True):
     This metric is independent of the absolute values of the labels:
     a permutation of the class or cluster label values won't change the
     score value in any way.
-    The imbalanced version of this metric is symmetric: switching ``label_true`` 
-    with ``label_pred`` will return the same score value. However, this is not the 
+    The imbalanced version of this metric is symmetric: switching ``label_true``
+    with ``label_pred`` will return the same score value. However, this is not the
     case for the balanaced V-measure, as the true labels are reweighted.
-    The balanced V-measure is obtained by reweighing the contingency table for 
-    all true label marginals, such that they sum to the same nummber, while 
+    The balanced V-measure is obtained by reweighing the contingency table for
+    all true label marginals, such that they sum to the same nummber, while
     preserving the total number of samples.
     Parameters
     ----------
@@ -184,7 +186,7 @@ def balanced_v_measure(labels_true, labels_pred, *, beta=1.0, reweigh=True):
     reweigh : bool, default=True
             if `True`, reweighs the contingency table based on the true labels
             such that they all have equal membership. The total number of samples
-            is preserved with a round-off error. If 'False', this reverts the 
+            is preserved with a round-off error. If 'False', this reverts the
             balanced V-measure to the original V-measure implementation.
     Returns
     -------
