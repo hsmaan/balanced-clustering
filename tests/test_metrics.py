@@ -6,7 +6,8 @@ import pandas as pd
 from sklearn import cluster
 
 from imbalanced_clustering import balanced_adjusted_rand_index, \
-    balanced_adjusted_mutual_info
+    balanced_adjusted_mutual_info, balanced_homogeneity, balanced_completeness, \
+    balanced_v_measure 
 
 # Set random seed for reproducibility
 random.seed(42)
@@ -175,3 +176,49 @@ def test_bal_ami_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
 
     # Ensure that the balanced AMI in this case is higher than the imbalanced AMI
     assert bal_ami > imbal_ami
+    
+    
+def test_bal_homogeneity_3_class_1_small(three_classes_one_small):
+    # Perform k-means clustering on three classes with one minority class
+    class_cluster_df = k_means_df(three_classes_one_small, n_clusters = 2)
+
+    # Calculated balanced and imbalanced homogeneity 
+    bal_homog = balanced_homogeneity(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = True
+    )
+    imbal_homog = balanced_homogeneity(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = False
+    )
+
+    # Ensure that the balanced homogeneity is lower than the imbalanced homogeneity
+    assert bal_homog < imbal_homog
+    
+def test_bal_completeness_3_class_1_small(three_classes_one_small):
+    # Perform k-means clustering on three classes with one minority class
+    class_cluster_df = k_means_df(three_classes_one_small, n_clusters = 2)
+
+    # Calculated balanced and imbalanced completeness 
+    bal_comp = balanced_completeness(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = True
+    )
+    imbal_comp = balanced_completeness(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = False
+    )
+
+    # Ensure that the balanced completeness is lower than the imbalanced completeness
+    assert bal_comp < imbal_comp
+    
+def test_bal_v_measure_3_class_1_small(three_classes_one_small):
+    # Perform k-means clustering on three classes with one minority class
+    class_cluster_df = k_means_df(three_classes_one_small, n_clusters = 2)
+
+    # Calculated balanced and imbalanced v-measure 
+    bal_v = balanced_v_measure(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = True
+    )
+    imbal_v = balanced_v_measure(
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh = False
+    )
+
+    # Ensure that the balanced v-measure is lower than the imbalanced v-measure
+    assert bal_v < imbal_v
