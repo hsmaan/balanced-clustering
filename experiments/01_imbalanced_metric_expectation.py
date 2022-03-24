@@ -87,7 +87,7 @@ def separated_gaussians(num_classes, num_clusters, min_class_size, max_class_siz
     ]
     
     # Sample centers for Gaussian distributions
-    gaussian_center_interval = np.linspace(0, 1000, 100)
+    gaussian_center_interval = np.arange(0, 1000, 10)
     gaussian_centers = [
         np.random.choice(gaussian_center_interval, num_classes, replace = False) \
             for center in range(num_classes)
@@ -100,7 +100,7 @@ def separated_gaussians(num_classes, num_clusters, min_class_size, max_class_siz
     for i in range(num_classes):
         # Sample class values from Gaussian distribution
         x = np.random.normal(
-            loc = gaussian_centers[i], 
+            loc = gaussian_centers[i][0], 
             scale = 0.1,
             size=(class_size_samples[i], 2)
         )
