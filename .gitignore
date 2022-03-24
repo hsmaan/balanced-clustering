@@ -2,3 +2,5 @@ __pycache__
 poetry.lock
 .ipynb_checkpoints*
 testing_notebooks
+outs
+slurm
