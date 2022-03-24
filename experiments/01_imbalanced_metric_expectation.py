@@ -54,11 +54,11 @@ def random_data(num_classes, num_clusters, min_class_size, max_class_size):
         # Append values to list 
         x_1_all.append(x[:, 0])
         x_2_all.append(x[:, 1])        
-        class_vals.append(i * np.ones(class_size_samples[i]))
+        class_vals.append(i * np.ones(class_size_samples[i], dtype = "int"))
     
     # Concatenate all class values into single dataframe 
     class_df = pd.DataFrame({
-        "x": np.concateanate(x_1_all),
+        "x": np.concatenate(x_1_all),
         "y": np.concatenate(x_2_all),
         "class": np.concatenate(class_vals)
     })
@@ -70,7 +70,8 @@ def random_data(num_classes, num_clusters, min_class_size, max_class_size):
     
     # Get all metrics and return 
     aris, amis, homogs, completes, v_measures = return_metrics(
-        class_arr = class_df["class"], cluster_arr = class_df["kmeans"]
+        class_arr = class_df["class"].__array__(), 
+        cluster_arr = class_df["kmeans"].__array__()
     )
     return aris, amis, homogs, completes, v_measures
     
@@ -106,11 +107,11 @@ def separated_gaussians(num_classes, num_clusters, min_class_size, max_class_siz
         # Append values to list 
         x_1_all.append(x[:, 0])
         x_2_all.append(x[:, 1])        
-        class_vals.append(i * np.ones(class_size_samples[i]))
+        class_vals.append(i * np.ones(class_size_samples[i], dtype = "int"))
     
     # Concatenate all class values into single dataframe 
     class_df = pd.DataFrame({
-        "x": np.concateanate(x_1_all),
+        "x": np.concatenate(x_1_all),
         "y": np.concatenate(x_2_all),
         "class": np.concatenate(class_vals)
     })
@@ -210,7 +211,6 @@ def main(num_trials = 1000):
         bal_homog_sep.append(homogs[1])
         bal_complete_sep.append(completes[1])
         bal_vmeasure_sep.append(v_measures[1])
-    
 
     # Create dataframe of results and save
     res_df = pd.DataFrame({
