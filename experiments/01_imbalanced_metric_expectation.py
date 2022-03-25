@@ -187,9 +187,9 @@ def main(num_trials = 1000):
         
     # Iterate over given trials and generate separated data
     for i in range(num_trials):
-        # Sample class and cluster numbers
+        # Sample class and cluster numbers (equal here to simulate perfect case)
         num_classes = np.random.choice(class_size_range)
-        num_clusters = np.random.choice(cluster_size_range)
+        num_clusters = num_classes
         
         # Get scores from generating random data 
         aris, amis, homogs, completes, v_measures = separated_gaussians(
