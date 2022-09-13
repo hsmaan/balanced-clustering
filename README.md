@@ -29,6 +29,8 @@ balanced_adjusted_rand_index(labels_sim, cluster_sim)
 
 For more details on the implementation of the balanced clustering metrics, mathematical formalism, and specific use-cases, please see [Walkthrough notebook #1](notebooks/01_imbalanced_metric_demo.ipynb). Extended experiments on interpolation behavior between the balanced and vanilla imbalanced metrics can be found in [Walkthrough notebook #2](notebooks/02_imbalanced_metric_interpolation_tests.ipynb).
 
+**Please note that *Extended Documentation* is currently a work in progress**
+
 ## Issues/bugs
 
 If any issues occur in either installation or usage, please open them and include a reproducible example. 
