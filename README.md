@@ -6,8 +6,8 @@ Class imbalance is prevalent across real-world datasets, including images, natur
 ## Installation via poetry - **To be uploaded to pypi**
 
 ```
-git clone https://github.com/hsmaan/imbalanced-clustering
-cd imbalanced-clustering
+git clone https://github.com/hsmaan/balanced-clustering
+cd balanced-clustering
 poetry install 
 ```
 
