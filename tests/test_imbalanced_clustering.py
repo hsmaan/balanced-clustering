@@ -1,4 +1,4 @@
-from imbalanced_clustering import __version__
+from balanced_clustering import __version__
 
 
 def test_version():
