@@ -2,26 +2,15 @@
 #           Corey Lynch <coreylynch9@gmail.com>
 # License: BSD 3 clause
 
-from libc.math cimport exp, lgamma
-from scipy.special import gammaln
 import numpy as np
-cimport numpy as np
-cimport cython
+import numba
+from scipy.special import gammaln
 
-np.import_array()
-ctypedef np.float64_t DOUBLE
-
-def expected_mutual_information(contingency, int n_samples):
+@numba.njit(fastmath=True, cache=True, parallel=True)
+def expected_mutual_information(contingency, n_samples: int):
     """Calculate the expected mutual information for two labelings."""
-    cdef int R, C
-    cdef DOUBLE N, gln_N, emi, term2, term3, gln
-    cdef np.ndarray[DOUBLE] gln_a, gln_b, gln_Na, gln_Nb, gln_nij, log_Nnij
-    cdef np.ndarray[DOUBLE] nijs, term1
-    cdef np.ndarray[DOUBLE] log_a, log_b
-    cdef np.ndarray[np.int32_t] a, b
-    #cdef np.ndarray[int, ndim=2] start, end
     R, C = contingency.shape
-    N = <DOUBLE>n_samples
+    N = n_samples
     a = np.ravel(contingency.sum(axis=1).astype(np.int32, copy=False))
     b = np.ravel(contingency.sum(axis=0).astype(np.int32, copy=False))
     # There are three major terms to the EMI equation, which are multiplied to
@@ -45,7 +34,7 @@ def expected_mutual_information(contingency, int n_samples):
     gln_N = gammaln(N + 1)
     gln_nij = gammaln(nijs + 1)
     # start and end values for nij terms for each summation.
-    start = np.array([[v - N + w for w in b] for v in a], dtype='int')
+    start = np.array([[v - N + w for w in b] for v in a], dtype=int)
     start = np.maximum(start, 1)
     end = np.minimum(np.resize(a, (C, R)).T, np.resize(b, (R, C))) + 1
     # emi itself is a summation over the various values.
