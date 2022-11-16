@@ -39,7 +39,6 @@ def expected_mutual_information(contingency, n_samples: int):
     end = np.minimum(np.resize(a, (C, R)).T, np.resize(b, (R, C))) + 1
     # emi itself is a summation over the various values.
     emi = 0.0
-    cdef Py_ssize_t i, j, nij
     for i in range(R):
         for j in range(C):
             for nij in range(start[i,j], end[i,j]):
