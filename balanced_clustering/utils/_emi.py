@@ -6,7 +6,7 @@ import numpy as np
 import numba
 from scipy.special import gammaln
 from scipy.sparse import spmatrix
-from math import exp
+from math import exp, lgamma
 
 @numba.njit(fastmath=True, cache=True, parallel=True)
 def _emi(a, b, R, C, N):
