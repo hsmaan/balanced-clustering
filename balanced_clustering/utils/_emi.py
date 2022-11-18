@@ -5,18 +5,15 @@
 import numpy as np
 import numba
 from scipy.special import gammaln
+from scipy.sparse import spmatrix
+from math import exp
 
 @numba.njit(fastmath=True, cache=True, parallel=True)
-def expected_mutual_information(contingency, n_samples: int):
-    """Calculate the expected mutual information for two labelings."""
-    R, C = contingency.shape
-    N = n_samples
-    a = np.ravel(contingency.sum(axis=1).astype(np.int32, copy=False))
-    b = np.ravel(contingency.sum(axis=0).astype(np.int32, copy=False))
+def _emi(a, b, R, C, N):
     # There are three major terms to the EMI equation, which are multiplied to
     # and then summed over varying nij values.
     # While nijs[0] will never be used, having it simplifies the indexing.
-    nijs = np.arange(0, max(np.max(a), np.max(b)) + 1, dtype='float')
+    nijs = np.arange(0, max(np.max(a), np.max(b)) + 1, dtype=float)
     nijs[0] = 1  # Stops divide by zero warnings. As its not used, no issue.
     # term1 is nij / N
     term1 = nijs / N
@@ -51,3 +48,13 @@ def expected_mutual_information(contingency, n_samples: int):
                 term3 = exp(gln)
                 emi += (term1[nij] * term2 * term3)
     return emi
+    
+
+def expected_mutual_information(contingency: spmatrix, n_samples: int):
+    """Calculate the expected mutual information for two labelings."""
+    R, C = contingency.shape
+    N = n_samples
+    a = np.ravel(contingency.sum(axis=1).astype(np.int32, copy=False))
+    b = np.ravel(contingency.sum(axis=0).astype(np.int32, copy=False))
+    return _emi(a, b, R, C, N)
+
