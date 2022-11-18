@@ -9,7 +9,6 @@ from balanced_clustering import (
     balanced_adjusted_rand_index,
     balanced_adjusted_mutual_info,
     balanced_homogeneity,
-    balanced_completeness,
     balanced_v_measure,
 )
 
