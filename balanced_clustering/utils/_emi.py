@@ -4,7 +4,6 @@
 
 import numpy as np
 import numba
-from scipy.special import gammaln
 from scipy.sparse import spmatrix
 from math import exp, lgamma
 
@@ -13,7 +12,7 @@ def _emi(a, b, R, C, N):
     # There are three major terms to the EMI equation, which are multiplied to
     # and then summed over varying nij values.
     # While nijs[0] will never be used, having it simplifies the indexing.
-    nijs = np.arange(0, max(np.max(a), np.max(b)) + 1, dtype=float)
+    nijs = np.arange(0.0, max(np.max(a), np.max(b)) + 1, dtype='float64')
     nijs[0] = 1  # Stops divide by zero warnings. As its not used, no issue.
     # term1 is nij / N
     term1 = nijs / N
@@ -24,14 +23,14 @@ def _emi(a, b, R, C, N):
     log_Nnij = np.log(N) + np.log(nijs)
     # term3 is large, and involved many factorials. Calculate these in log
     # space to stop overflows.
-    gln_a = gammaln(a + 1)
-    gln_b = gammaln(b + 1)
-    gln_Na = gammaln(N - a + 1)
-    gln_Nb = gammaln(N - b + 1)
-    gln_N = gammaln(N + 1)
-    gln_nij = gammaln(nijs + 1)
+    gln_a = [lgamma(ai + 1) for ai in a] 
+    gln_b = [lgamma(bi + 1) for bi in b]
+    gln_Na = [lgamma(N - ai + 1) for ai in a]
+    gln_Nb = [lgamma(N - bi + 1) for bi in b]
+    gln_N = lgamma(N + 1)
+    gln_nij = [lgamma(nijs_i + 1) for nijs_i in nijs]
     # start and end values for nij terms for each summation.
-    start = np.array([[v - N + w for w in b] for v in a], dtype=int)
+    start = np.array([[v - N + w for w in b] for v in a], dtype='int32')
     start = np.maximum(start, 1)
     end = np.minimum(np.resize(a, (C, R)).T, np.resize(b, (R, C))) + 1
     # emi itself is a summation over the various values.
