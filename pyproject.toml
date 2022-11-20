@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "imbalanced-clustering"
+name = "balanced-clustering"
 version = "0.1.0"
 description = "Clustering metrics for imbalanced datasets"
 authors = ["Hassaan Maan <hurmaan99@gmail.com>"]

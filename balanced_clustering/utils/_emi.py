@@ -8,7 +8,9 @@ from scipy.sparse import spmatrix
 from math import exp, lgamma
 
 @numba.njit(fastmath=True, cache=True, parallel=True)
-def _emi(a, b, R, C, N):
+def _emi(a, b, N):
+    R = len(a)
+    C = len(b)
     # There are three major terms to the EMI equation, which are multiplied to
     # and then summed over varying nij values.
     # While nijs[0] will never be used, having it simplifies the indexing.
@@ -23,21 +25,26 @@ def _emi(a, b, R, C, N):
     log_Nnij = np.log(N) + np.log(nijs)
     # term3 is large, and involved many factorials. Calculate these in log
     # space to stop overflows.
-    gln_a = [lgamma(ai + 1) for ai in a] 
+    gln_a = [lgamma(ai + 1) for ai in a]
     gln_b = [lgamma(bi + 1) for bi in b]
     gln_Na = [lgamma(N - ai + 1) for ai in a]
     gln_Nb = [lgamma(N - bi + 1) for bi in b]
     gln_N = lgamma(N + 1)
     gln_nij = [lgamma(nijs_i + 1) for nijs_i in nijs]
     # start and end values for nij terms for each summation.
-    start = np.array([[v - N + w for w in b] for v in a])
+    # start = np.array([[v - N + w for w in b] for v in a])
+    start = np.zeros((R, C))
+    end = np.zeros((R, C))
+    for r in range(R):
+        for c in range(C):
+            start[r, c] = a[r] + b[c] - N
+            end[r, c] = min(a[r], b[c]) + 1
     start = np.maximum(start, 1)
-    end = np.minimum(np.resize(a, (C, R)).T, np.resize(b, (R, C))) + 1
     # emi itself is a summation over the various values.
     emi = 0.0
     for i in range(R):
         for j in range(C):
-            for nij in range(start[i,j], end[i,j]):
+            for nij in range(start[i][j], end[i,j]):
                 term2 = log_Nnij[nij] - log_a[i] - log_b[j]
                 # Numerators are positive, denominators are negative.
                 gln = (gln_a[i] + gln_b[j] + gln_Na[i] + gln_Nb[j]
@@ -47,13 +54,12 @@ def _emi(a, b, R, C, N):
                 term3 = exp(gln)
                 emi += (term1[nij] * term2 * term3)
     return emi
-    
+
 
 def expected_mutual_information(contingency: spmatrix, n_samples: int):
     """Calculate the expected mutual information for two labelings."""
-    R, C = contingency.shape
     N = n_samples
     a = np.ravel(contingency.sum(axis=1).astype(np.int32, copy=False))
     b = np.ravel(contingency.sum(axis=0).astype(np.int32, copy=False))
-    return _emi(a, b, R, C, N)
+    return _emi(a, b, N)
 
