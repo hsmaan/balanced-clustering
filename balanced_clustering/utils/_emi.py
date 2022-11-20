@@ -2,32 +2,19 @@
 #           Corey Lynch <coreylynch9@gmail.com>
 # License: BSD 3 clause
 
-from libc.math cimport exp, lgamma
-from scipy.special import gammaln
 import numpy as np
-cimport numpy as np
-cimport cython
+import numba
+from scipy.sparse import spmatrix
+from math import exp, lgamma
 
-np.import_array()
-ctypedef np.float64_t DOUBLE
-
-def expected_mutual_information(contingency, int n_samples):
-    """Calculate the expected mutual information for two labelings."""
-    cdef int R, C
-    cdef DOUBLE N, gln_N, emi, term2, term3, gln
-    cdef np.ndarray[DOUBLE] gln_a, gln_b, gln_Na, gln_Nb, gln_nij, log_Nnij
-    cdef np.ndarray[DOUBLE] nijs, term1
-    cdef np.ndarray[DOUBLE] log_a, log_b
-    cdef np.ndarray[np.int32_t] a, b
-    #cdef np.ndarray[int, ndim=2] start, end
-    R, C = contingency.shape
-    N = <DOUBLE>n_samples
-    a = np.ravel(contingency.sum(axis=1).astype(np.int32, copy=False))
-    b = np.ravel(contingency.sum(axis=0).astype(np.int32, copy=False))
+@numba.njit(fastmath=True, cache=True, parallel=True)
+def _emi(a, b, N):
+    R = len(a)
+    C = len(b)
     # There are three major terms to the EMI equation, which are multiplied to
     # and then summed over varying nij values.
     # While nijs[0] will never be used, having it simplifies the indexing.
-    nijs = np.arange(0, max(np.max(a), np.max(b)) + 1, dtype='float')
+    nijs = np.arange(0.0, float(max(np.max(a), np.max(b)) + 1))
     nijs[0] = 1  # Stops divide by zero warnings. As its not used, no issue.
     # term1 is nij / N
     term1 = nijs / N
@@ -38,22 +25,32 @@ def expected_mutual_information(contingency, int n_samples):
     log_Nnij = np.log(N) + np.log(nijs)
     # term3 is large, and involved many factorials. Calculate these in log
     # space to stop overflows.
-    gln_a = gammaln(a + 1)
-    gln_b = gammaln(b + 1)
-    gln_Na = gammaln(N - a + 1)
-    gln_Nb = gammaln(N - b + 1)
-    gln_N = gammaln(N + 1)
-    gln_nij = gammaln(nijs + 1)
+    gln_a = []
+    gln_Na = []
+    for ai in a:
+        gln_a.append(lgamma(ai + 1))
+        gln_Na.append(lgamma(N - ai + 1))
+    gln_b = []
+    gln_Nb = []
+    for bi in b:
+        gln_b.append(lgamma(bi + 1))
+        gln_Nb.append(lgamma(N - bi + 1))
+    gln_N = lgamma(N + 1)
+    gln_nij = [lgamma(nijs_i + 1) for nijs_i in nijs]
     # start and end values for nij terms for each summation.
-    start = np.array([[v - N + w for w in b] for v in a], dtype='int')
+    # start = np.array([[v - N + w for w in b] for v in a])
+    start = np.zeros((R, C))
+    end = np.zeros((R, C))
+    for r in range(R):
+        for c in range(C):
+            start[r, c] = a[r] + b[c] - N
+            end[r, c] = min(a[r], b[c]) + 1
     start = np.maximum(start, 1)
-    end = np.minimum(np.resize(a, (C, R)).T, np.resize(b, (R, C))) + 1
     # emi itself is a summation over the various values.
     emi = 0.0
-    cdef Py_ssize_t i, j, nij
     for i in range(R):
         for j in range(C):
-            for nij in range(start[i,j], end[i,j]):
+            for nij in range(start[i, j], end[i,j]):
                 term2 = log_Nnij[nij] - log_a[i] - log_b[j]
                 # Numerators are positive, denominators are negative.
                 gln = (gln_a[i] + gln_b[j] + gln_Na[i] + gln_Nb[j]
@@ -63,3 +60,12 @@ def expected_mutual_information(contingency, int n_samples):
                 term3 = exp(gln)
                 emi += (term1[nij] * term2 * term3)
     return emi
+
+
+def expected_mutual_information(contingency: spmatrix, n_samples: int):
+    """Calculate the expected mutual information for two labelings."""
+    N = n_samples
+    a = np.ravel(contingency.sum(axis=1).astype(np.int32, copy=False))
+    b = np.ravel(contingency.sum(axis=0).astype(np.int32, copy=False))
+    return _emi(a, b, N)
+
