@@ -12,7 +12,7 @@ def _emi(a, b, R, C, N):
     # There are three major terms to the EMI equation, which are multiplied to
     # and then summed over varying nij values.
     # While nijs[0] will never be used, having it simplifies the indexing.
-    nijs = np.arange(0.0, max(np.max(a), np.max(b)) + 1, dtype='float64')
+    nijs = np.arange(0.0, float(max(np.max(a), np.max(b)) + 1), dtype=np.float64)
     nijs[0] = 1  # Stops divide by zero warnings. As its not used, no issue.
     # term1 is nij / N
     term1 = nijs / N
@@ -30,7 +30,7 @@ def _emi(a, b, R, C, N):
     gln_N = lgamma(N + 1)
     gln_nij = [lgamma(nijs_i + 1) for nijs_i in nijs]
     # start and end values for nij terms for each summation.
-    start = np.array([[v - N + w for w in b] for v in a], dtype='int32')
+    start = np.array([[v - N + w for w in b] for v in a])
     start = np.maximum(start, 1)
     end = np.minimum(np.resize(a, (C, R)).T, np.resize(b, (R, C))) + 1
     # emi itself is a summation over the various values.
