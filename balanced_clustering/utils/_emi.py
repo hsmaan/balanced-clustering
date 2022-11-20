@@ -25,10 +25,16 @@ def _emi(a, b, N):
     log_Nnij = np.log(N) + np.log(nijs)
     # term3 is large, and involved many factorials. Calculate these in log
     # space to stop overflows.
-    gln_a = [lgamma(ai + 1) for ai in a]
-    gln_b = [lgamma(bi + 1) for bi in b]
-    gln_Na = [lgamma(N - ai + 1) for ai in a]
-    gln_Nb = [lgamma(N - bi + 1) for bi in b]
+    gln_a = []
+    gln_Na = []
+    for ai in a:
+        gln_a.append(lgamma(ai + 1))
+        gln_Na.append(lgamma(N - ai + 1))
+    gln_b = []
+    gln_Nb = []
+    for bi in b:
+        gln_b.append(lgamma(bi + 1))
+        gln_Nb.append(lgamma(N - bi + 1))
     gln_N = lgamma(N + 1)
     gln_nij = [lgamma(nijs_i + 1) for nijs_i in nijs]
     # start and end values for nij terms for each summation.
