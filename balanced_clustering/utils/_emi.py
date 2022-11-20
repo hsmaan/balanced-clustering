@@ -44,7 +44,7 @@ def _emi(a, b, N):
     emi = 0.0
     for i in range(R):
         for j in range(C):
-            for nij in range(start[i][j], end[i,j]):
+            for nij in range(start[i, j], end[i,j]):
                 term2 = log_Nnij[nij] - log_a[i] - log_b[j]
                 # Numerators are positive, denominators are negative.
                 gln = (gln_a[i] + gln_b[j] + gln_Na[i] + gln_Nb[j]
