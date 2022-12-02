@@ -7,6 +7,7 @@ import numba
 from scipy.sparse import spmatrix
 from math import exp, lgamma
 
+
 @numba.njit(fastmath=True, cache=True, parallel=True)
 def _emi(a, b, N):
     R = len(a)
@@ -50,15 +51,22 @@ def _emi(a, b, N):
     emi = 0.0
     for i in range(R):
         for j in range(C):
-            for nij in range(start[i, j], end[i,j]):
+            for nij in range(start[i, j], end[i, j]):
                 term2 = log_Nnij[nij] - log_a[i] - log_b[j]
                 # Numerators are positive, denominators are negative.
-                gln = (gln_a[i] + gln_b[j] + gln_Na[i] + gln_Nb[j]
-                     - gln_N - gln_nij[nij] - lgamma(a[i] - nij + 1)
-                     - lgamma(b[j] - nij + 1)
-                     - lgamma(N - a[i] - b[j] + nij + 1))
+                gln = (
+                    gln_a[i]
+                    + gln_b[j]
+                    + gln_Na[i]
+                    + gln_Nb[j]
+                    - gln_N
+                    - gln_nij[nij]
+                    - lgamma(a[i] - nij + 1)
+                    - lgamma(b[j] - nij + 1)
+                    - lgamma(N - a[i] - b[j] + nij + 1)
+                )
                 term3 = exp(gln)
-                emi += (term1[nij] * term2 * term3)
+                emi += term1[nij] * term2 * term3
     return emi
 
 
@@ -68,4 +76,3 @@ def expected_mutual_information(contingency: spmatrix, n_samples: int):
     a = np.ravel(contingency.sum(axis=1).astype(np.int32, copy=False))
     b = np.ravel(contingency.sum(axis=0).astype(np.int32, copy=False))
     return _emi(a, b, N)
-

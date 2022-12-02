@@ -16,6 +16,7 @@ from balanced_clustering import (
 random.seed(42)
 np.random.seed(42)
 
+
 # Fixture for loading gaussian blobs of 3 classes with 1 minority class
 @pytest.fixture
 def three_classes_one_small():
@@ -132,7 +133,8 @@ def test_bal_ari_2_class_balanced(two_classes_balanced):
 
 
 def test_bal_ari_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
-    # Perform k-means clustering on three classes with mixed sizes and imbalanced/overlapping
+    # Perform k-means clustering on three classes with mixed sizes and
+    # imbalanced/overlapping
     class_cluster_df = k_means_df(three_classes_mixed_imbalanced, n_clusters=3)
 
     # Calculated balanced and imbalanced ARI
@@ -180,7 +182,8 @@ def test_bal_ami_2_class_balanced(two_classes_balanced):
 
 
 def test_bal_ami_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
-    # Perform k-means clustering on three classes with mixed sizes and imbalanced/overlapping
+    # Perform k-means clustering on three classes with mixed sizes and
+    # imbalanced/overlapping
     class_cluster_df = k_means_df(three_classes_mixed_imbalanced, n_clusters=3)
 
     # Calculated balanced and imbalanced AMI
@@ -209,6 +212,7 @@ def test_bal_homogeneity_3_class_1_small(three_classes_one_small):
 
     # Ensure that the balanced homogeneity is lower than the imbalanced homogeneity
     assert bal_homog < imbal_homog
+
 
 def test_bal_v_measure_3_class_1_small(three_classes_one_small):
     # Perform k-means clustering on three classes with one minority class
