@@ -15,11 +15,52 @@ Currently, there are five balanced metrics that can be used - **Balanced Adjuste
 
 ```
 import numpy as np
-from imbalanced_clustering import balanced_adjusted_rand_index
+from balanced_clustering import balanced_adjusted_rand_index
 
 labels_sim = np.random.choice(["A","B","C"], 1000, replace=True)
 cluster_sim = np.random.choice([1,2,3,4,5], 1000, replace=True)
 balanced_adjusted_rand_index(labels_sim, cluster_sim)
+```
+
+## Detailed example 
+
+Consider the following example where we have 3 classes simulated from isotropic Gaussian distributions, and the clustering algorithm mis-clusters the smallest class:
+
+```
+import numpy as np
+from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, \
+    homogeneity_score, completeness_score, v_measure_score
+from sklearn.cluster import KMeans
+
+from balanced_clustering import balanced_adjusted_rand_index, \
+    balanced_adjusted_mutual_info, balanced_completeness, \
+    balanced_homogeneity, balanced_v_measure, return_metrics
+
+# Set a seed for reproducibility and create generator
+np.random.seed(42)
+
+# Sample three classes from separated gaussian distributions with varying
+# standard deviations and class size 
+c_1 = np.random.default_rng(seed = 0).normal(loc = 0, scale = 0.5, size = (500, 2))
+c_2 = np.random.default_rng(seed = 1).normal(loc = -2, scale = 0.1, size = (20, 2))
+c_3 = np.random.default_rng(seed = 2).normal(loc = 3, scale = 1, size = (500, 2))
+
+# Perform k-means clustering with k = 2 - this misclusters the smallest class 
+cluster_arr = np.array(cluster_df.iloc[:, 0:2])
+kmeans_res = KMeans(n_clusters = 2, random_state = 42).fit_predict(X = cluster_arr)
+
+# Return and print balanced and imbalanced comparisons 
+return_metrics(
+    class_arr = cluster_df["class"], cluster_arr = cluster_df["kmeans"]
+)
+```
+
+```
+ARI imbalanced: 0.915 ARI balanced: 0.5434
+AMI imbalanced: 0.8671 AMI balanced: 0.686
+Homogeneity imbalanced: 0.8204 Homogeneity balanced: 0.5402
+Completeness imbalanced: 0.9198 Completeness balanced : 0.941
+V-measure imbalanced: 0.8673 V-measure balanced: 0.6864
 ```
 
 ## Notebooks 
