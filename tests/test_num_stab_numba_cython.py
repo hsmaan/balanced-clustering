@@ -69,7 +69,6 @@ def two_classes_balanced():
     )
     return class_df
 
-
 # Fixture for three clusters, two with smaller sizes, overlapping in the middle
 @pytest.fixture
 def three_classes_mixed_imbalanced():
@@ -92,6 +91,7 @@ def three_classes_mixed_imbalanced():
             ),
         }
     )
+    return class_df
     
 # Function for generating k-means clusters from a given dataset
 def k_means_df(class_df, n_clusters=2):
@@ -178,7 +178,7 @@ def test_bal_ami_2_class_balanced(two_classes_balanced):
         class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     bal_ami_cython = balanced_adjusted_mutual_info_cython(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=False
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     
     # Ensure that the two values are approximately equal
@@ -194,7 +194,7 @@ def test_bal_ami_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
         class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     bal_ami_cython = balanced_adjusted_mutual_info(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=False
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     
     # Ensure that the two values are approximately equal
@@ -209,7 +209,7 @@ def test_bal_homogeneity_3_class_1_small(three_classes_one_small):
         class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     bal_homog_cython = balanced_homogeneity_cython(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=False
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     
     # Ensure that the two values are approximately equal
@@ -224,7 +224,7 @@ def test_bal_v_measure_3_class_1_small(three_classes_one_small):
         class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     bal_v_cython = balanced_v_measure(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=False
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     
     # Ensure that the two values are approximately equal
@@ -239,7 +239,7 @@ def test_bal_complete_3_class_1_small(three_classes_one_small):
         class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     bal_complete_cython = balanced_completeness_cython(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=False
+        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
     )
     
     # Ensure that the two values are approximately equal

@@ -54,12 +54,19 @@ def _emi(a, b, N):
             for nij in range(start[i, j], end[i, j]):
                 term2 = log_Nnij[nij] - log_a[i] - log_b[j]
                 # Numerators are positive, denominators are negative.
-                gln = (gln_a[i] + gln_b[j] + gln_Na[i] + gln_Nb[j]
-                     - gln_N - gln_nij[nij] - gammaln(a[i] - nij + 1)
-                     - gammaln(b[j] - nij + 1)
-                     - gammaln(N - a[i] - b[j] + nij + 1))
-                term3 = np.exp(gln)
-                emi += (term1[nij] * term2 * term3)
+                gln = (
+                    gln_a[i]
+                    + gln_b[j]
+                    + gln_Na[i]
+                    + gln_Nb[j]
+                    - gln_N
+                    - gln_nij[nij]
+                    - lgamma(a[i] - nij + 1)
+                    - lgamma(b[j] - nij + 1)
+                    - lgamma(N - a[i] - b[j] + nij + 1)
+                )
+                term3 = exp(gln)
+                emi += term1[nij] * term2 * term3
     return emi
 
 
