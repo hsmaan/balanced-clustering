@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn import cluster
 
-from imbalanced_clustering import (
+from balanced_clustering import (
     balanced_adjusted_rand_index,
     balanced_adjusted_mutual_info,
     balanced_homogeneity,

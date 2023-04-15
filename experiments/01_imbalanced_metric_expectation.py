@@ -7,7 +7,7 @@ from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, \
     homogeneity_score, completeness_score, v_measure_score
 from sklearn.cluster import KMeans
 
-from imbalanced_clustering import balanced_adjusted_rand_index, \
+from balanced_clustering import balanced_adjusted_rand_index, \
     balanced_adjusted_mutual_info, balanced_completeness, \
     balanced_homogeneity, balanced_v_measure 
 
