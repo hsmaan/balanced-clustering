@@ -4,3 +4,4 @@ poetry.lock
 testing_notebooks
 outs
 slurm
+.vscode
