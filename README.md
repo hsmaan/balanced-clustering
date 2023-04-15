@@ -15,7 +15,7 @@ Currently, there are five balanced metrics that can be used - **Balanced Adjuste
 
 ```
 import numpy as np
-from imbalanced_clustering import balanced_adjusted_rand_index
+from balanced_clustering import balanced_adjusted_rand_index
 
 labels_sim = np.random.choice(["A","B","C"], 1000, replace=True)
 cluster_sim = np.random.choice([1,2,3,4,5], 1000, replace=True)
@@ -32,9 +32,9 @@ from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, \
     homogeneity_score, completeness_score, v_measure_score
 from sklearn.cluster import KMeans
 
-from imbalanced_clustering import balanced_adjusted_rand_index, \
+from balanced_clustering import balanced_adjusted_rand_index, \
     balanced_adjusted_mutual_info, balanced_completeness, \
-    balanced_homogeneity, balanced_v_measure
+    balanced_homogeneity, balanced_v_measure, return_metrics
 
 # Set a seed for reproducibility and create generator
 np.random.seed(42)
