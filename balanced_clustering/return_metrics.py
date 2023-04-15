@@ -6,6 +6,44 @@ from .ami import balanced_adjusted_mutual_info
 from .vmeasure import balanced_homogeneity, balanced_completeness, balanced_v_measure
 
 def return_metrics(class_arr, cluster_arr, print_metrics = True):
+    '''
+    Compare imbalanced and balanced ARI, AMI, homogeneity, completeness, and 
+    V-measure scores.
+    
+    Parameters
+    ----------
+    class_arr : int array-like of shape (n_samples,)
+        Ground-truth class labels to be used as a reference.
+    cluster_arr : int array-like of shape (n_samples,)
+        A clustering of the data into disjoint subsets.
+    print_metrics : bool, default=True
+        If True, print the scores.
+        If False, return the scores.
+    
+    Returns
+    -------
+    ari_imbalanced : float
+        The imbalanced ARI score.
+    ari_balanced : float
+        The balanced ARI score.
+    ami_imbalanced : float
+        The imbalanced AMI score.
+    ami_balanced : float
+        The balanced AMI score.
+    homog_imbalanced : float
+        The imbalanced homogeneity score.
+    homog_balanced : float
+        The balanced homogeneity score.
+    complete_imbalanced : float
+        The imbalanced completeness score.
+    complete_balanced : float
+        The balanced completeness score.
+    v_measure_imbalanced : float
+        The imbalanced V-measure score.
+    v_measure_balanced : float
+        The balanced V-measure score.
+    '''
+    
     # Determine the imbalanced (base) metric scores 
     ari_imbalanced = adjusted_rand_score(class_arr, cluster_arr)
     ami_imbalanced = adjusted_mutual_info_score(class_arr, cluster_arr)
