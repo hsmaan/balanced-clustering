@@ -1,26 +1,22 @@
 [tool.poetry]
-name = "imbalanced-clustering"
+name = "balanced-clustering"
 version = "0.1.0"
 description = "Clustering metrics for imbalanced datasets"
 authors = ["Hassaan Maan <hurmaan99@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<=3.10.0"
-numpy = "^1.22.2"
-scipy = "^1.8.0"
-scikit-learn = "^1.0.2"
-pandas = "^1.4.1"
-Cython = "^0.29.28"
-jupyter = "^1.0.0"
-ipykernel = "^6.9.1"
-jupyterlab = "^3.2.9"
-jupyterlab-latex = "^3.1.0"
-seaborn = "^0.11.2"
+python = ">=3.8"
+numpy = ">=1.13.3"
+scipy = ">=1.4"
+scikit-learn = ">=0.22"
+pandas = ">=1.0.0"
+numba = ">=0.41.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-black = "^22.1.0"
-flake8 = "^3.8.3"
+pytest = ">=5.2"
+black = ">=22.1.0"
+flake8 = ">=3.8.3"
+pre-commit = ">=3.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

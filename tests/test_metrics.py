@@ -9,13 +9,13 @@ from balanced_clustering import (
     balanced_adjusted_rand_index,
     balanced_adjusted_mutual_info,
     balanced_homogeneity,
-    balanced_completeness,
     balanced_v_measure,
 )
 
 # Set random seed for reproducibility
 random.seed(42)
 np.random.seed(42)
+
 
 # Fixture for loading gaussian blobs of 3 classes with 1 minority class
 @pytest.fixture
@@ -133,7 +133,8 @@ def test_bal_ari_2_class_balanced(two_classes_balanced):
 
 
 def test_bal_ari_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
-    # Perform k-means clustering on three classes with mixed sizes and imbalanced/overlapping
+    # Perform k-means clustering on three classes with mixed sizes and
+    # imbalanced/overlapping
     class_cluster_df = k_means_df(three_classes_mixed_imbalanced, n_clusters=3)
 
     # Calculated balanced and imbalanced ARI
@@ -181,7 +182,8 @@ def test_bal_ami_2_class_balanced(two_classes_balanced):
 
 
 def test_bal_ami_3_class_mixed_imbalanced(three_classes_mixed_imbalanced):
-    # Perform k-means clustering on three classes with mixed sizes and imbalanced/overlapping
+    # Perform k-means clustering on three classes with mixed sizes and
+    # imbalanced/overlapping
     class_cluster_df = k_means_df(three_classes_mixed_imbalanced, n_clusters=3)
 
     # Calculated balanced and imbalanced AMI
@@ -210,22 +212,6 @@ def test_bal_homogeneity_3_class_1_small(three_classes_one_small):
 
     # Ensure that the balanced homogeneity is lower than the imbalanced homogeneity
     assert bal_homog < imbal_homog
-
-
-def test_bal_completeness_3_class_1_small(three_classes_one_small):
-    # Perform k-means clustering on three classes with one minority class
-    class_cluster_df = k_means_df(three_classes_one_small, n_clusters=2)
-
-    # Calculated balanced and imbalanced completeness
-    bal_comp = balanced_completeness(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
-    )
-    imbal_comp = balanced_completeness(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=False
-    )
-
-    # Ensure that the balanced completeness is lower than the imbalanced completeness
-    assert bal_comp < imbal_comp
 
 
 def test_bal_v_measure_3_class_1_small(three_classes_one_small):
