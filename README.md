@@ -44,14 +44,17 @@ np.random.seed(42)
 c_1 = np.random.default_rng(seed = 0).normal(loc = 0, scale = 0.5, size = (500, 2))
 c_2 = np.random.default_rng(seed = 1).normal(loc = -2, scale = 0.1, size = (20, 2))
 c_3 = np.random.default_rng(seed = 2).normal(loc = 3, scale = 1, size = (500, 2))
+classes = np.concatenate(
+    [np.repeat("A", len(c_1)), np.repeat("B", len(c_2)), np.repeat("C", len(c_3))]
+)
 
 # Perform k-means clustering with k = 2 - this misclusters the smallest class 
-cluster_arr = np.array([c_1, c_2, c_3])
+cluster_arr = np.concatenate([c_1, c_2, c_3])
 kmeans_res = KMeans(n_clusters = 2, random_state = 42).fit_predict(X = cluster_arr)
 
 # Return and print balanced and imbalanced comparisons 
 return_metrics(
-    class_arr = cluster_df["class"], cluster_arr = cluster_df["kmeans"]
+    class_arr = classes, cluster_arr = kmeans_res,
 )
 ```
 
