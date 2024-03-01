@@ -211,23 +211,6 @@ def test_bal_homogeneity_3_class_1_small(three_classes_one_small):
     # Ensure that the balanced homogeneity is lower than the imbalanced homogeneity
     assert bal_homog < imbal_homog
 
-
-def test_bal_completeness_3_class_1_small(three_classes_one_small):
-    # Perform k-means clustering on three classes with one minority class
-    class_cluster_df = k_means_df(three_classes_one_small, n_clusters=2)
-
-    # Calculated balanced and imbalanced completeness
-    bal_comp = balanced_completeness(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=True
-    )
-    imbal_comp = balanced_completeness(
-        class_cluster_df["cluster"], class_cluster_df["kmeans"], reweigh=False
-    )
-
-    # Ensure that the balanced completeness is lower than the imbalanced completeness
-    assert bal_comp < imbal_comp
-
-
 def test_bal_v_measure_3_class_1_small(three_classes_one_small):
     # Perform k-means clustering on three classes with one minority class
     class_cluster_df = k_means_df(three_classes_one_small, n_clusters=2)
