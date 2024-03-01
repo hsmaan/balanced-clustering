@@ -1,7 +1,15 @@
-# balanced-clustering
-## Assessing clustering performance in imbalanced data contexts
+# balanced-clustering <!-- omit in toc -->
+## Assessing clustering performance in imbalanced data contexts <!-- omit in toc -->
 
 Class imbalance is prevalent across real-world datasets, including images, natural language, and biological data. In unsupervised learning, clustering performance is often assessed with respect to a ground-truth set of labels using metrics such as the Adjusted Rand Index (ARI). Akin to the issue in classification when using overall accuracy, clustering metrics fail to capture information about class imbalance. imbalanced-clustering presents *balanced* clustering metrics, that take into account class imbalance and reweigh the results accordingly. Combined with vanilla clustering metrics (https://scikit-learn.org/stable/modules/clustering.html), imbalanced-clustering offers a more complete perspective on clustering and related tasks.
+
+## Table of contents  <!-- omit in toc -->
+- [Installation via pip](#installation-via-pip)
+- [Usage](#usage)
+- [Detailed example](#detailed-example)
+- [Notebooks](#notebooks)
+- [Issues/bugs](#issuesbugs)
+- [Citation information](#citation-information)
 
 ## Installation via pip
 
@@ -75,3 +83,13 @@ For more details on the implementation of the balanced clustering metrics, mathe
 ## Issues/bugs
 
 If any issues occur in either installation or usage, please open them and include a reproducible example. 
+
+## Citation information
+
+If you use the balanced clustering metrics in your research, please reference the following publication:
+
+> The differential impacts of dataset imbalance in single-cell data integration
+>
+> Hassaan Maan, Lin Zhang, Chengxin Yu, Michael Geuenich, Kieran R. Campbell, Bo Wang
+>
+> bioRxiv December 19, 2022; doi: https://doi.org/10.1101/2022.10.06.511156  
