@@ -1,6 +1,8 @@
 # balanced-clustering <!-- omit in toc -->
 ## Assessing clustering performance in imbalanced data contexts <!-- omit in toc -->
 
+These metrics were first described in [Characterizing the impacts of dataset imbalance on single-cell data integration](https://www.nature.com/articles/s41587-023-02097-9). If you use these metrics, please [cite our work](#citation-information).
+
 Class imbalance is prevalent across real-world datasets, including images, natural language, and biological data. In unsupervised learning, clustering performance is often assessed with respect to a ground-truth set of labels using metrics such as the Adjusted Rand Index (ARI). Akin to the issue in classification when using overall accuracy, clustering metrics fail to capture information about class imbalance. imbalanced-clustering presents *balanced* clustering metrics, that take into account class imbalance and reweigh the results accordingly. Combined with vanilla clustering metrics (https://scikit-learn.org/stable/modules/clustering.html), imbalanced-clustering offers a more complete perspective on clustering and related tasks.
 
 ## Table of contents  <!-- omit in toc -->
@@ -88,8 +90,4 @@ If any issues occur in either installation or usage, please open them and includ
 
 If you use the balanced clustering metrics in your research, please reference the following publication:
 
-> The differential impacts of dataset imbalance in single-cell data integration
->
-> Hassaan Maan, Lin Zhang, Chengxin Yu, Michael Geuenich, Kieran R. Campbell, Bo Wang
->
-> bioRxiv December 19, 2022; doi: https://doi.org/10.1101/2022.10.06.511156  
+Maan, H. et al. (2024) ‘Characterizing the impacts of dataset imbalance on single-cell data integration’, Nature biotechnology. Available at: https://doi.org/10.1038/s41587-023-02097-9.
